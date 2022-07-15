@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -36,6 +38,11 @@ import view.ListViewPane;
 import view.ModuleSelectionToolMenuBar;
 import view.SelectModulesPane;
 
+/**
+ * Controller class to handle the business logic between the view and the model.
+ * @author mh
+ *
+ */
 public class ModuleSelectionToolController  {
 
 	/*
@@ -59,6 +66,12 @@ public class ModuleSelectionToolController  {
 	private OverviewSelectionPane osp;
 	
 
+	/**
+	 * Constructor takes a view and a model object and stores them within the controller.
+	 * Objects for each pane within the program are then instantiated.
+	 * @param view
+	 * @param model
+	 */
 	public ModuleSelectionToolController(ModuleSelectionToolRootPane view, StudentProfile model) {
 		//initialise view and model fields
 		this.view = view;
@@ -79,7 +92,10 @@ public class ModuleSelectionToolController  {
 	}
 
 
-	//event handler (currently empty), which can be used for creating a profile
+	/**
+	 * event handler, which can be used for creating a profile.
+	 *
+	 */
 	private class CreateStudentProfileHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			// validate these fields 
@@ -113,6 +129,10 @@ public class ModuleSelectionToolController  {
 		}
 	}
 	
+	/**
+	 * This function handles the click event of an 'Add' button
+	 *
+	 */
 	private class AddButtonClickHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e) {
@@ -131,6 +151,10 @@ public class ModuleSelectionToolController  {
 		}
 	}
 
+	/**
+	 * This function handles the click event of a 'Remove' button
+	 *
+	 */
 	private class RemoveButtonClickHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e)  {
@@ -146,6 +170,10 @@ public class ModuleSelectionToolController  {
 		}
 	}
 	
+	/**
+	 * This function handles the click event of a 'Reset' button
+	 *
+	 */
 	private class ResetButtonClickHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e)  {
@@ -153,6 +181,10 @@ public class ModuleSelectionToolController  {
 		}
 	}
 	
+	/**
+	 * This function handles the click event of a 'Submit' button
+	 *
+	 */
 	private class SubmitButtonClickHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e) {
@@ -174,6 +206,10 @@ public class ModuleSelectionToolController  {
 		}
 	}
 		
+	/**
+	 * This function handles the click event of a 'Confirm' button
+	 *
+	 */
 	private class ConfirmButtonClickHandler implements EventHandler<ActionEvent> {
 		@Override
 		public void handle(ActionEvent e) {
@@ -239,6 +275,11 @@ public class ModuleSelectionToolController  {
 		}
 	}
 	
+	/**
+	 * Writes the user's data to a local file so long as the p number has
+	 * been filled out.
+	 *
+	 */
 	private class SaveHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e) {
@@ -257,6 +298,11 @@ public class ModuleSelectionToolController  {
 		}
 	}
 	
+	
+	/**
+	 * Loads data from a file back into the program preserving the state of the previous
+	 * session.
+	 */
 	private class LoadFileHandler implements EventHandler<ActionEvent>  {
 		@Override
 		public void handle(ActionEvent e) {
@@ -341,6 +387,14 @@ public class ModuleSelectionToolController  {
 	//helper method - generates course and module data and returns courses within an array
 	// TODO this can be done dynamically using a Scanner and text file
 	private Course[] generateAndReturnCourses() {
+		
+		try {
+			Scanner sc = new Scanner(new File("courses.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println("Error locating courses file.");
+			e.printStackTrace();
+		}
+		
 		Module imat3423 = new Module("IMAT3423", "Systems Building: Methods", 15, true, Schedule.TERM_1);
 		Module ctec3451 = new Module("CTEC3451", "Development Project", 30, true, Schedule.YEAR_LONG);
 		Module ctec3902_SoftEng = new Module("CTEC3902", "Rigorous Systems", 15, true, Schedule.TERM_2);	
